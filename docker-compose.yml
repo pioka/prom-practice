@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+  prom_node_exporter:
+    image: prom/node-exporter
+    network_mode: host
+    ports:
+      - 9100:9100
+    volumes:
+      - /:/host:ro
+    pid: host
+    command:
+      - --path.rootfs=/host
+
+  prom_prometheus:
+    image: prom/prometheus
+    network_mode: host
+    ports: 
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prom_prometheus_volume:/prometheus
+
+  prom_grafana:
+    image: grafana/grafana
+    network_mode: host
+    ports:
+      - 3000:3000
+    volumes:
+      - prom_grafana_volume:/var/lib/grafana
+
+volumes:
+  prom_prometheus_volume:
+  prom_grafana_volume:
