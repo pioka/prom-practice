@@ -13,7 +13,7 @@ services:
   prom_prometheus:
     image: prom/prometheus
     extra_hosts:
-      - dockerhost:172.30.0.1
+      - dockerhost:172.17.0.1
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prom_prometheus_volume:/prometheus
@@ -21,17 +21,9 @@ services:
   prom_grafana:
     image: grafana/grafana
     ports:
-      - 3000:3000
+      - 80:3000
     volumes:
       - prom_grafana_volume:/var/lib/grafana
-
-
-networks: 
-  default:
-    driver: bridge
-    ipam:
-      config:
-      - subnet: 172.30.0.0/16
 
 
 volumes:
