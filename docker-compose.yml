@@ -8,6 +8,7 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
+    restart: always
 
   node_exporter:
     image: prom/node-exporter
@@ -17,6 +18,7 @@ services:
     pid: host
     command:
       - --path.rootfs=/host
+    restart: always
 
   grafana:
     image: grafana/grafana
@@ -24,6 +26,7 @@ services:
       - 3000:3000
     volumes:
       - grafana_data:/var/lib/grafana
+    restart: always
 
 
 volumes:
