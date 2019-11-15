@@ -1,7 +1,15 @@
 version: '3'
 
 services:
-  prom_node_exporter:
+  prometheus:
+    image: prom/prometheus
+    extra_hosts:
+      - dockerhost:172.17.0.1
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+
+  node_exporter:
     image: prom/node-exporter
     network_mode: host
     volumes:
@@ -10,22 +18,14 @@ services:
     command:
       - --path.rootfs=/host
 
-  prom_prometheus:
-    image: prom/prometheus
-    extra_hosts:
-      - dockerhost:172.17.0.1
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prom_prometheus_volume:/prometheus
-
-  prom_grafana:
+  grafana:
     image: grafana/grafana
     ports:
-      - 80:3000
+      - 3000:3000
     volumes:
-      - prom_grafana_volume:/var/lib/grafana
+      - grafana_data:/var/lib/grafana
 
 
 volumes:
-  prom_prometheus_volume:
-  prom_grafana_volume:
+  prometheus_data:
+  grafana_data:
